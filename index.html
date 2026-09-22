@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f9fc">
+  <meta name="description" content="HST-GS accelerates 3D Gaussian Splatting through spatial screening, scheduled refinement, and forward-only rendering.">
+  <title>HST-GS | Fast 3D Gaussian Splatting</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="media.css">
+  <script src="media.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="HST-GS, back to top"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span> HST-GS</a>
+      <div class="nav-links">
+        <a href="#training">Video</a><a href="#method">Method</a><a href="#results">Results</a><a href="#gallery">Compare</a><a href="#citation">Citation</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section id="top" class="hero">
+      <div class="hero-halo" aria-hidden="true"></div>
+      <div class="wrap hero-inner">
+        <p class="eyebrow"><span class="eyebrow-line"></span> 3D Gaussian Splatting · Research project</p>
+        <h1><span>HST-GS</span><br>Fast 3D Gaussian Splatting with<br class="desktop-break"> Hierarchical Super-Tiles and Scheduled Refinement</h1>
+        <p class="hero-lede">Sparsifying when and where computation happens across training and rendering.</p>
+        <div class="authors" aria-label="Authors">
+          <span>Yu-Jie Xiong<sup>1</sup></span><span>Zheng Zhou<sup>2</sup></span><span>Jia-Chen Zhang<sup>3</sup></span><span>Xijiong Xie<sup>4,*</sup></span>
+        </div>
+        <p class="affiliations"><sup>1</sup> Shanghai University of Engineering Science <span>·</span> <sup>2</sup> Xiamen University <span>·</span> <sup>3</sup> East China Normal University <span>·</span> <sup>4</sup> Ningbo University</p>
+        <p class="author-note">* Corresponding author</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://github.com/X-Lab-CN/HST-GS" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-4 4 4 4m8-8 4 4-4 4m-3-11-2 18"/></svg> Code <span class="button-arrow" aria-hidden="true">↗</span></a>
+          <a class="text-link" href="#training">Watch demo <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="metrics-band" aria-label="Key results">
+      <div class="wrap metrics-grid">
+        <div class="metric"><span class="metric-value">5.13<span>×</span></span><span class="metric-label">faster training</span><span class="metric-detail">vs. AbsGS backbone · 13 scenes</span></div>
+        <div class="metric"><span class="metric-value">60.9<span>%</span></span><span class="metric-label">fewer Gaussian–tile pairs</span><span class="metric-detail">4 × 4 super-tile screening</span></div>
+        <div class="metric"><span class="metric-value">1.80<span>×</span></span><span class="metric-label">rendering throughput</span><span class="metric-detail">RFR vs. native evaluation</span></div>
+      </div>
+    </section>
+
+
+    <section id="training" class="section wrap training-section">
+      <div class="media-heading"><div class="section-intro"><p class="kicker">01 / Training in motion</p><h2>Watch the scene come into focus</h2><p id="training-description">A fixed test view of Bicycle, with reconstruction quality tracked against training time.</p></div><div class="training-switch" role="group" aria-label="Training video scene"><button type="button" data-training-scene="bicycle" aria-pressed="true">Bicycle</button><button type="button" data-training-scene="flowers" aria-pressed="false">Flowers</button><button type="button" data-training-scene="garden" aria-pressed="false">Garden</button><button type="button" data-training-scene="stump" aria-pressed="false">Stump</button></div></div>
+      <figure class="video-figure">
+        <video id="training-video" controls muted playsinline preload="metadata" poster="assets/media/bicycle-poster.png" aria-label="Bicycle training progression: HST-GS and the AbsGS backbone over time" aria-describedby="video-caption"><source src="assets/media/bicycle.mp4" type="video/mp4">Your browser does not support embedded video. <a id="training-video-fallback" href="assets/media/bicycle.mp4">Download the training video</a>.</video>
+        <figcaption id="video-caption"><span class="video-legend"><span><i class="legend-ours"></i> HST-GS</span><span><i class="legend-baseline"></i> AbsGS backbone</span></span><a id="training-video-download" href="assets/media/bicycle.mp4" download="bicycle.mp4">Download Bicycle MP4 ↓</a></figcaption>
+      </figure>
+      <p class="media-note">The clip compresses training into 10 seconds. The HST-GS view and red curve stop updating when its run finishes; the backbone continues. Horizontal plot coordinates show elapsed training time.</p>
+    </section>
+
+    <section id="overview" class="section wrap abstract-section">
+      <div class="section-heading"><p class="kicker">02 / The idea</p><h2>Less redundant work.<br><em>Same scene representation.</em></h2></div>
+      <div class="abstract-copy"><h3>Abstract</h3><p>3D Gaussian Splatting renders novel views efficiently, yet its pipeline still performs avoidable work. HST-GS reduces computation along three complementary dimensions. Hierarchical Super-Tile Screening (HST) rejects Gaussian–tile assignments that cannot make a retained contribution. Scheduled Refinement (SR) skips selected complete optimization steps after density control ends. Render-Time Forward Rasterization (RFR) specializes the final rendering path for forward-only execution.</p><p>Across 13 scenes from Mip-NeRF 360, Deep Blending, and Tanks &amp; Temples, HST and SR yield a <strong>5.13×</strong> average training speedup over the shared AbsGS backbone with comparable reconstruction quality. RFR improves average rendering throughput by <strong>1.80×</strong> on the same trained models.</p></div>
+    </section>
+
+    <section id="method" class="section method-section">
+      <div class="wrap">
+        <div class="section-intro"><p class="kicker">03 / Method</p><h2>Three dimensions of execution</h2><p>HST-GS trims work within each rasterization step, across training steps, and after training.</p></div>
+        <figure class="paper-figure">
+          <img src="assets/paper-overview.png" alt="Paper overview showing HST reducing Gaussian–tile work, SR reducing optimization steps, and RFR improving render throughput beside example reconstructions" width="1515" height="630" loading="lazy">
+          <figcaption>Motivation and overview from the HST-GS manuscript (Figure 1). The workload profiles are schematic.</figcaption>
+        </figure>
+        <div class="method-grid">
+          <article class="method-card"><div class="card-top"><span class="card-number">01</span><span class="card-tag">Spatial</span></div><div class="card-icon spatial-icon" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><h3>Hierarchical Super-Tile Screening</h3><p>Screen 4 × 4 groups before emitting base-tile instances, then sort surviving work with a compact 24-bit depth key.</p><strong>60.9% fewer pairs</strong></article>
+          <article class="method-card"><div class="card-top"><span class="card-number">02</span><span class="card-tag">Temporal</span></div><div class="card-icon temporal-icon" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><h3>Scheduled Refinement</h3><p>After density control, distribute sparse complete optimization steps through the remaining training horizon.</p><strong>35% of the nominal budget skipped</strong></article>
+          <article class="method-card"><div class="card-top"><span class="card-number">03</span><span class="card-tag">Render-time</span></div><div class="card-icon render-icon" aria-hidden="true"><span class="render-orbit"></span><span class="render-core"></span><span class="render-ray"></span></div><h3>Forward Rasterization</h3><p>Use a compact forward-only path for evaluating the trained scene, without training-oriented intermediate work.</p><strong>1.80× average throughput</strong></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="results" class="section results-section wrap">
+      <div class="section-intro"><p class="kicker">04 / Results</p><h2>Fast training, competitive quality</h2><p>Results below follow the current manuscript. HST-GS reconstruction metrics are 3-seed means; rendering FPS uses the complete RFR path.</p></div>
+      <div class="result-highlight">
+        <div class="result-highlight-copy"><p class="small-label">Training efficiency · 13 scenes</p><h3>21.26 <span>→</span> 4.14 <small>min</small></h3><p>Average training time falls from 21.26 minutes for the AbsGS backbone to 4.14 minutes with HST + SR.</p></div>
+        <div class="bar-chart" role="img" aria-label="Training time in minutes across 13 scenes: AbsGS 21.26, AbsGS plus SR 13.75, AbsGS plus HST 6.58, HST-GS 4.14">
+          <div class="bar-row"><span>AbsGS</span><div class="bar-track"><i style="--bar:100%"></i></div><b>21.26</b></div>
+          <div class="bar-row"><span>+ SR</span><div class="bar-track"><i style="--bar:64.7%"></i></div><b>13.75</b></div>
+          <div class="bar-row"><span>+ HST</span><div class="bar-track"><i style="--bar:31%"></i></div><b>6.58</b></div>
+          <div class="bar-row is-ours"><span>HST-GS</span><div class="bar-track"><i style="--bar:19.5%"></i></div><b>4.14</b></div>
+        </div>
+      </div>
+      <div class="results-table-header"><div><h3>Benchmark comparison</h3><p>Compare representative methods across the three datasets.</p></div><div class="tab-list" role="tablist" aria-label="Dataset"><button class="tab is-active" type="button" role="tab" aria-selected="true" aria-controls="comparison-panel" data-dataset="mip">Mip-NeRF 360</button><button class="tab" type="button" role="tab" aria-selected="false" aria-controls="comparison-panel" tabindex="-1" data-dataset="deep">Deep Blending</button><button class="tab" type="button" role="tab" aria-selected="false" aria-controls="comparison-panel" tabindex="-1" data-dataset="tanks">Tanks &amp; Temples</button></div></div>
+      <div id="comparison-panel" class="table-scroll" role="tabpanel" tabindex="0" aria-label="Benchmark comparison table"><table><caption class="sr-only">Benchmark metrics by method and selected dataset</caption><thead><tr><th scope="col">Method</th><th scope="col">Time <span>min ↓</span></th><th scope="col">PSNR <span>↑</span></th><th scope="col">SSIM <span>↑</span></th><th scope="col">LPIPS <span>↓</span></th><th scope="col">Gaussians <span>↓</span></th><th scope="col">FPS <span>↑</span></th></tr></thead><tbody id="comparison-rows"></tbody></table></div>
+      <p class="table-note">Table 1 values from the supplied manuscript. FPS reflects each method’s reported evaluation path; HST-GS uses RFR. Lower is better for Time, LPIPS, and Gaussian count.</p>
+      <div class="throughput-card"><div><p class="small-label">Render-time efficiency</p><h3>353.93 FPS</h3><p>Overall RFR throughput, compared with 196.39 FPS from the native evaluation rasterizer on the same HST-GS models and test views.</p></div><div class="throughput-visual" role="img" aria-label="Native renderer 196.39 FPS; RFR 353.93 FPS, a 1.80 times increase"><div><span>Native</span><i style="--bar:55.5%"></i><b>196.39</b></div><div class="rfr-bar"><span>RFR</span><i style="--bar:100%"></i><b>353.93</b></div><strong>1.80×</strong></div></div>
+
+      <div class="evidence-section">
+        <div class="media-heading"><div><p class="kicker">Experimental evidence</p><h3>Inspect the measured trade-offs</h3><p>Training, refinement schedules, and warmed rendering across the evaluated scenes.</p></div></div>
+        <div class="plot-tabs" role="tablist" aria-label="Experiment charts">
+          <button id="plot-tab-training" class="plot-tab" type="button" role="tab" aria-selected="true" aria-controls="plot-panel" data-plot="training">Training</button>
+          <button id="plot-tab-refinement" class="plot-tab" type="button" role="tab" aria-selected="false" aria-controls="plot-panel" tabindex="-1" data-plot="refinement">SR schedule</button>
+          <button id="plot-tab-rendering" class="plot-tab" type="button" role="tab" aria-selected="false" aria-controls="plot-panel" tabindex="-1" data-plot="rendering">Render time</button>
+        </div>
+        <div id="plot-panel" class="plot-panel" role="tabpanel" aria-labelledby="plot-tab-training" tabindex="0">
+          <div class="plot-summary"><h4 id="plot-title">Training acceleration across all 13 scenes</h4><p id="plot-summary">HST + SR speeds up training by 3.84×–6.80× across individual scenes. Reconstruction changes vary by scene; the 13-scene mean PSNR change is −0.080 dB.</p></div>
+          <button id="open-plot" class="plot-image-button" type="button" aria-label="Enlarge training acceleration chart"><img id="experiment-image" src="assets/plots/fig_perscene.png" width="3418" height="1889" alt="Per-scene training speedup and PSNR differences for SR, HST and HST-GS" loading="lazy"><span class="expand-mark">Enlarge ↗</span></button>
+          <p id="plot-caption" class="plot-caption">Per-scene 3-seed means on A800. The source figure labels HST as “HTS”. Training speedup uses the AbsGS backbone as its reference.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="section gallery-section">
+      <div class="wrap">
+        <div class="section-intro"><p class="kicker">05 / Compare reconstructions</p><h2>13 scenes. Two views each.</h2><p>Choose a scene and drag the divider to compare the AbsGS backbone with HST-GS at the same camera view.</p></div>
+        <div class="scene-explorer">
+          <div class="scene-toolbar"><div class="scene-datasets" role="group" aria-label="Scene dataset"><button type="button" data-scene-group="mip" aria-pressed="true">Mip-NeRF 360 <span>9</span></button><button type="button" data-scene-group="tanks" aria-pressed="false">Tanks &amp; Temples <span>2</span></button><button type="button" data-scene-group="deep" aria-pressed="false">Deep Blending <span>2</span></button></div><span class="scene-total">26 paired views</span></div>
+          <div id="scene-choices" class="scene-choices" role="group" aria-label="Scene"></div>
+          <div class="scene-title-row"><div><h3 id="scene-title">Bicycle</h3><p id="scene-subtitle">Mip-NeRF 360 · View 1</p></div><div class="view-buttons" role="group" aria-label="Camera view"><button type="button" data-scene-view="1" aria-pressed="true">View 1</button><button type="button" data-scene-view="2" aria-pressed="false">View 2</button></div></div>
+          <div class="comparison-matte"><div id="compare-stage" class="compare-stage" style="--split:50%;--aspect:1.505376">
+            <img id="scene-after" class="pair-image pair-after" src="assets/scenes/bicycle_v1.jpg" alt="HST-GS reconstruction of Bicycle, view 1">
+            <div class="pair-before"><img id="scene-before" class="pair-image" src="assets/scenes/bicycle_v1.jpg" alt="AbsGS backbone reconstruction of Bicycle, view 1"></div>
+            <div id="compare-divider" class="compare-divider" aria-hidden="true"><span>‹ ›</span></div>
+          </div></div>
+          <div class="comparison-controls"><span>AbsGS backbone</span><input id="compare-range" type="range" min="0" max="100" value="50" aria-label="Comparison split: amount of AbsGS backbone visible" aria-valuetext="50 percent backbone, 50 percent HST-GS"><span>HST-GS</span></div>
+          <div class="scene-bottom"><p id="scene-status" role="status" aria-live="polite">Bicycle · View 1 ready.</p><button id="open-scene-pair" type="button">Open side-by-side pair ↗</button></div>
+        </div>
+        <p class="media-note">Image annotations describe the shown example run and view; they are not the 3-seed scene averages in the quantitative tables. The comparison uses the original paired images.</p>
+        <details class="paper-comparison"><summary>View the paper’s comparison with other methods <span aria-hidden="true">+</span></summary><figure class="comparison-figure"><button type="button" id="open-figure" aria-label="Open paper qualitative comparison at full size"><img src="assets/qualitative-comparison.png" alt="Four scene crops compared across ground truth, HST-GS, FastGS, Taming-3DGS, DashGaussian, and Speedy-Splat" width="1515" height="725" loading="lazy"><span>View larger ↗</span></button><figcaption>Figure 3 from the supplied HST-GS manuscript.</figcaption></figure></details>
+      </div>
+    </section>
+
+    <section id="citation" class="section citation-section wrap"><div class="section-intro"><p class="kicker">06 / Citation</p><h2>Cite HST-GS</h2><p>Please use the manuscript citation below until a final venue entry is available.</p></div><div class="citation-box"><div class="citation-top"><span>BibTeX</span><button id="copy-bibtex" type="button" aria-label="Copy BibTeX citation">Copy citation</button></div><pre id="bibtex"><code>@misc{xiong2026hstgs,
+  title  = {HST-GS: Fast 3D Gaussian Splatting with Hierarchical Super-Tiles and Scheduled Refinement},
+  author = {Xiong, Yu-Jie and Zhou, Zheng and Zhang, Jia-Chen and Xie, Xijiong},
+  year   = {2026},
+  note   = {Preprint}
+}</code></pre></div>
+      <div class="credits"><div><h3>Credits &amp; acknowledgements</h3><p>HST-GS builds on the AbsGS training backbone and evaluates on Mip-NeRF 360, Deep Blending, and Tanks &amp; Temples. The method overview and baseline comparison come from the HST-GS manuscript. Training video, scene comparisons, and experiment plots are from the HST-GS project resources.</p></div><p>Academic page layout inspired by <a href="https://dashgaussian.github.io/" target="_blank" rel="noopener">DashGaussian</a>.</p></div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="wrap"><span>© 2026 HST-GS authors</span><div><a href="#top">Back to top ↑</a><a href="https://github.com/X-Lab-CN/HST-GS" target="_blank" rel="noopener">Code ↗</a></div></div></footer>
+  <dialog id="figure-dialog" aria-label="Qualitative comparison, full size"><button id="close-figure" type="button" aria-label="Close image">×</button><img src="assets/qualitative-comparison.png" alt="Large qualitative comparison of ground truth, HST-GS, and four baseline methods"></dialog>
+</body>
+</html>
