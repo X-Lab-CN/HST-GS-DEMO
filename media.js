@@ -15,10 +15,19 @@
   document.getElementById('open-figure').addEventListener('click', () => showImage('assets/qualitative-comparison.png', 'Paper comparison: ground truth, HST-GS, FastGS, Taming-3DGS, DashGaussian, and Speedy-Splat'));
 
   const trainingScenes = {
-    bicycle: { name: 'Bicycle', file: 'bicycle.mp4', poster: 'bicycle-poster.png' },
-    flowers: { name: 'Flowers', file: 'flowers.mp4', poster: 'flowers-poster.png' },
-    garden: { name: 'Garden', file: 'garden.mp4', poster: 'garden-poster.png' },
-    stump: { name: 'Stump', file: 'stump.mp4', poster: 'stump-poster.png' }
+    bicycle: { name: 'Bicycle', file: 'bicycle.mp4', poster: 'bicycle-poster.jpg' },
+    flowers: { name: 'Flowers', file: 'flowers.mp4', poster: 'flowers-poster.jpg' },
+    garden: { name: 'Garden', file: 'garden.mp4', poster: 'garden-poster.jpg' },
+    stump: { name: 'Stump', file: 'stump.mp4', poster: 'stump-poster.jpg' },
+    treehill: { name: 'Treehill', file: 'treehill.mp4', poster: 'treehill-poster.jpg' },
+    room: { name: 'Room', file: 'room.mp4', poster: 'room-poster.jpg' },
+    counter: { name: 'Counter', file: 'counter.mp4', poster: 'counter-poster.jpg' },
+    kitchen: { name: 'Kitchen', file: 'kitchen.mp4', poster: 'kitchen-poster.jpg' },
+    bonsai: { name: 'Bonsai', file: 'bonsai.mp4', poster: 'bonsai-poster.jpg' },
+    truck: { name: 'Truck', file: 'truck.mp4', poster: 'truck-poster.jpg' },
+    train: { name: 'Train', file: 'train.mp4', poster: 'train-poster.jpg' },
+    playroom: { name: 'Playroom', file: 'playroom.mp4', poster: 'playroom-poster.jpg' },
+    drjohnson: { name: 'Dr. Johnson', file: 'drjohnson.mp4', poster: 'drjohnson-poster.jpg' }
   };
   const trainingVideo = document.getElementById('training-video');
   const trainingSource = trainingVideo.querySelector('source');
@@ -27,12 +36,14 @@
   const trainingFallback = document.getElementById('training-video-fallback');
   trainingButtons.forEach(button => button.addEventListener('click', () => {
     const scene = trainingScenes[button.dataset.trainingScene];
+    if (!scene) return;
     const src = 'assets/media/' + scene.file;
     if (trainingSource.getAttribute('src') === src) return;
     const resume = !trainingVideo.paused && !trainingVideo.ended;
     trainingVideo.pause();
     trainingSource.src = src;
-    trainingVideo.poster = 'assets/media/' + scene.poster;
+    if (scene.poster) trainingVideo.poster = 'assets/media/' + scene.poster;
+    else trainingVideo.removeAttribute('poster');
     trainingVideo.setAttribute('aria-label', scene.name + ' training progression: HST-GS and the AbsGS backbone over time');
     document.getElementById('training-description').textContent = 'A fixed test view of ' + scene.name + ', with reconstruction quality tracked against training time.';
     trainingDownload.href = src;

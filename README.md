@@ -4,7 +4,7 @@
 
 ## 本版新增
 
-- 训练视频：Bicycle、Flowers、Garden 和 Stump 四段 10 秒训练过程，支持场景切换、原生播放、进度、全屏和对应视频下载。灰线是 AbsGS backbone，红线是 HST-GS。播放由读者启动。
+- 训练视频：按数据集分组展示全部 13 个场景（Mip-NeRF 360 的 9 个、Tanks & Temples 的 2 个、Deep Blending 的 2 个）。每段视频为 10 秒，支持场景切换、原生播放、进度、全屏和对应视频下载。灰线是 AbsGS backbone，红线是 HST-GS。Garden 已使用 docs 中更新的视频及从该视频重新提取的预览图。
 - 场景交互对比：Mip-NeRF 360 的 9 个场景、Tanks & Temples 的 2 个场景和 Deep Blending 的 2 个场景；每个场景 2 个视角。支持分隔线拖动、键盘滑块和原始左右拼图放大。
 - 实验图切换：训练效率、SR 调度和渲染时间，共 3 张源图，均可放大。
 - 保留方法总览、跨方法基准表、训练/渲染数字和 BibTeX。
@@ -15,14 +15,8 @@
 
 | 本版资源 | 对应源文件 | 用途 |
 | --- | --- | --- |
-| assets/media/bicycle.mp4 | static/videos/train/bicycle.mp4 | 正确标注 AbsGS 的训练视频 |
-| assets/media/bicycle-poster.png | 上述视频的 9.8 秒画面 | 从真实视频提取的海报 |
-| assets/media/flowers.mp4 | static/videos/train/flowers.mp4 | Flowers 训练视频 |
-| assets/media/flowers-poster.png | 上述视频的 9.8 秒画面 | 从真实视频提取的海报 |
-| assets/media/garden.mp4 | static/videos/train/garden.mp4 | Garden 训练视频 |
-| assets/media/garden-poster.png | 上述视频的 9.8 秒画面 | 从真实视频提取的海报 |
-| assets/media/stump.mp4 | static/videos/train/stump.mp4 | Stump 训练视频 |
-| assets/media/stump-poster.png | 上述视频的 9.8 秒画面 | 从真实视频提取的海报 |
+| assets/media/*.mp4 | static/videos/train/*.mp4 | 全部 13 个场景训练视频；Truck、Train 的文件名在本页中统一为小写 |
+| assets/media/*-poster.jpg | 对应视频的 9.8 秒画面 | 从各场景当前视频提取的预览图；Garden 已重新提取 |
 | assets/scenes/ | static/images/qual/ | 26 张上下拼图；CSS 分别显示上半部 Backbone 与下半部 HST-GS |
 | assets/pairs/ | static/images/tour/ | 26 张原始左右拼图，用于放大查看 |
 | assets/plots/fig_perscene.png | 同名源图 | 逐场景训练加速与 PSNR 差异 |
@@ -44,7 +38,7 @@
 - compare4_factor.png 展示不同训练配置间的旧版 native FPS 比较；本页优先使用当前同一模型上的 RFR/native 渲染实验图。
 - 源 docs/index.html 使用旧标题和六位作者；当前提供的 PR.pdf 使用正式长标题和四位作者。页面署名、机构、通讯作者标记和 BibTeX 均以该稿件为准。
 - 已移除 Read paper 和 Paper 按钮，稿件 PDF 也未打包。公开论文链接确定后再添加。本页 BibTeX 暂为 Preprint；录用后应补充正式刊物信息。
-- 当前训练区提供 Bicycle、Flowers、Garden 和 Stump 四条真实视频；以后可在 assets/media/ 增加其他场景视频。
+- 当前训练区提供源目录中全部 13 个场景视频。
 - 具体资助及正式致谢可根据作者最终确认内容修改。
 
 ## 修改入口
@@ -68,4 +62,4 @@ python -m http.server 8000
 
 ## 已验证
 
-在本地 Chrome 检查了 1440、390、320 像素宽度；四个训练视频的切换与播放、26 个场景视角、3 组图表、鼠标拖动、键盘滑块、图片放大/Escape 关闭及 BibTeX 复制均通过，未出现页面脚本错误或整页横向溢出。
+在本地 Chrome 检查了 1440、390、320 像素宽度；13 个训练视频的切换与加载、26 个场景视角、3 组图表、鼠标拖动、键盘滑块、图片放大/Escape 关闭及 BibTeX 复制均通过，未出现页面脚本错误或整页横向溢出。

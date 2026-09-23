@@ -6,10 +6,15 @@
 .media-heading .section-intro{margin:0;max-width:730px}
 .media-badge{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-size:12px;font-weight:700;color:#58727d;background:#edf7f6;border:1px solid #cee5e3;padding:8px 12px;border-radius:999px}
 .media-badge>span{width:6px;height:6px;background:#0a8e91;border-radius:50%}
-.training-switch{display:inline-flex;gap:4px;flex:0 0 auto;padding:4px;border:1px solid #cee5e3;border-radius:999px;background:#edf7f6}
-.training-switch button{border:0;border-radius:999px;background:transparent;color:#536f7a;cursor:pointer;font-size:13px;font-weight:750;padding:7px 17px;min-width:86px;transition:background .2s,color .2s}
+.training-picker{display:grid;gap:13px;margin:-3px 0 25px;padding:18px 20px;border:1px solid #cee5e3;border-radius:15px;background:#edf7f6}
+.training-group{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:start}
+.training-group+.training-group{padding-top:12px;border-top:1px solid #d5e8e7}
+.training-group-label{display:flex;flex-direction:column;gap:1px;padding-top:6px;color:#365a66;font-size:13px;font-weight:800;line-height:1.25}
+.training-group-label small{color:#78929b;font-size:11px;font-weight:600}
+.training-switch{display:flex;flex-wrap:wrap;gap:7px;min-width:0}
+.training-switch button{border:1px solid #cfe1e2;border-radius:999px;background:#fff;color:#536f7a;cursor:pointer;font-size:13px;font-weight:750;padding:6px 13px;white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
 .training-switch button[aria-pressed=true]{background:var(--ink);color:#fff;box-shadow:0 2px 7px #10284126}
-.training-switch button:hover:not([aria-pressed=true]){color:var(--accent-dark);background:#fff}
+.training-switch button:hover:not([aria-pressed=true]){color:var(--accent-dark);border-color:var(--accent)}
 .video-figure{margin:0;border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden;box-shadow:var(--shadow)}
 .video-figure video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#fff}
 .video-figure figcaption{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:15px 22px;border-top:1px solid var(--line);font-size:13px}
@@ -35,3 +40,5 @@ body:has(dialog[open]){overflow:hidden}dialog{padding:16px;max-width:96vw;max-he
 @media(max-width:700px){.hero-inner{padding-top:44px;padding-bottom:52px}.hero h1{font-size:clamp(31px,8vw,44px)}.training-section{padding-top:65px;padding-bottom:35px}.abstract-section{padding-top:35px}.video-figure{border-radius:10px}.video-figure figcaption{align-items:start;flex-direction:column;gap:8px;padding:13px 16px}.video-legend{gap:14px}.media-note{font-size:13px}.evidence-section{margin-top:40px;padding-top:35px}.evidence-section h3{font-size:24px}.plot-tabs{gap:6px}.plot-tab{padding:8px 10px;font-size:13px}.plot-panel{padding:19px 13px 14px}.plot-summary h4{font-size:18px}.plot-summary p{font-size:14px}.plot-image-button{overflow:hidden}.plot-caption{font-size:12px}.scene-toolbar{padding:12px}.scene-datasets{gap:4px}.scene-datasets button{font-size:12px;padding:7px}.scene-datasets button>span{display:none}.scene-choices{padding:14px 12px 4px;gap:6px}.scene-choices button{padding:5px 10px;font-size:12px}.scene-title-row{padding:16px 14px 14px;gap:8px}.scene-title-row h3{font-size:25px}.view-buttons button{padding:5px 9px;font-size:12px}.comparison-matte{padding:8px}.comparison-controls{padding:15px 14px 4px;gap:9px}.comparison-controls>span{font-size:11px}.scene-bottom{padding:10px 14px 16px;flex-direction:column;align-items:start;gap:5px}.paper-comparison summary{padding:15px;font-size:14px}.paper-comparison{margin-top:26px}dialog{padding:9px}dialog button{position:sticky}}
 @media(max-width:480px){.training-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:min(100%,320px);border-radius:16px}.training-switch button{min-width:0}}
 @media(prefers-reduced-motion:reduce){.compare-stage{transition:none}}
+@media(max-width:700px){.training-picker{padding:15px}.training-group{grid-template-columns:1fr;gap:8px}.training-group-label{flex-direction:row;gap:8px;align-items:baseline;padding-top:0}}
+@media(max-width:480px){.training-switch{display:flex;grid-template-columns:none;width:auto;border-radius:0}.training-switch button{min-width:0;padding:6px 10px;font-size:12px}}
